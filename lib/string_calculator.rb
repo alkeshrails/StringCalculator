@@ -19,9 +19,9 @@ class StringCalculator
     end
 
     # Split the numbers using the delimiter and calculate the sum
-    splitted_numbers = numbers.delete(' ').split(/#{Regexp.escape(delimiter)}|,|\n/)
-
-    raise ArgumentError, "Invalid input" if splitted_numbers.any?(&:empty?)
+    splitted_numbers = numbers.split(/#{Regexp.escape(delimiter)}|,|\n/)&.map(&:strip)
+    
+    raise ArgumentError, "Invalid input" if splitted_numbers.any?(&:empty?) || splitted_numbers.any? { |num| num.match(/\s{1,}/) }
 
     # Check for negative numbers and raise an exception if found
     negatives = splitted_numbers.select { |num| num.to_i.negative? }

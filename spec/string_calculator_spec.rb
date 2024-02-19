@@ -22,8 +22,22 @@ RSpec.describe StringCalculator do
         expect(subject.add("11, 22, 33")).to eq(11 + 22 + 33)
       end
 
-      it "remove empty spaces and returns the sum of numbers" do
-        expect(subject.add("1 1, 2  2, 3   3")).to eq(11 + 22 + 33)
+      it "returns the sum of numbers for space after the number" do
+        expect(subject.add("11 ,22 ,33")).to eq(11 + 22 + 33)
+      end
+
+      it "returns the sum of numbers for space before the number" do
+        expect(subject.add(" 11, 22, 33")).to eq(11 + 22 + 33)
+      end
+
+      it "returns the sum of numbers if space before and after the number" do
+        expect(subject.add(" 11  , 22  , 33")).to eq(11 + 22 + 33)
+      end
+
+      it "returns invalid input if empty space between two numbers" do
+        expect { subject.add("11,  2 2, 33") }.to raise_error(ArgumentError, "Invalid input")
+        expect { subject.add("1 1,  2 2, 33") }.to raise_error(ArgumentError, "Invalid input")
+        expect { subject.add("1 1,22,33") }.to raise_error(ArgumentError, "Invalid input")
       end
     end
 
