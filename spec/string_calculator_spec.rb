@@ -12,5 +12,9 @@ RSpec.describe StringCalculator do
     it "raises ArgumentError for non-string input" do
       expect { subject.add(100) }.to raise_error(ArgumentError, "Input must be a string")
     end
+
+    it "returns the number itself for single number" do
+      expect(subject.add("10")).to eq(10)
+    end
   end
 end
