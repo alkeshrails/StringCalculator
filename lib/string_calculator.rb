@@ -23,6 +23,10 @@ class StringCalculator
 
     raise ArgumentError, "Invalid input" if splitted_numbers.any?(&:empty?)
 
+    # Check for negative numbers and raise an exception if found
+    negatives = splitted_numbers.select { |num| num.to_i.negative? }
+    raise ArgumentError, "Negative numbers not allowed: #{negatives.join(', ')}" unless negatives.empty?
+
     splitted_numbers.map(&:to_i).sum
   end
 end

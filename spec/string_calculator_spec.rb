@@ -63,5 +63,19 @@ RSpec.describe StringCalculator do
         expect { subject.add("//;\n1;\n2") }.to raise_error(ArgumentError)
       end
     end
+
+    context "with negative numbers" do
+      it "raises ArgumentError with single negative number" do
+        expect { subject.add("1,-2,3") }.to raise_error(ArgumentError, "Negative numbers not allowed: -2")
+      end
+
+      it "raises ArgumentError with multiple negative numbers" do
+        expect { subject.add("-1,-2,3,-4") }.to raise_error(ArgumentError, "Negative numbers not allowed: -1, -2, -4")
+      end
+
+      it "raises ArgumentError with custom delimiter and negative numbers" do
+        expect { subject.add("//;\n1;-2;3;-4") }.to raise_error(ArgumentError, "Negative numbers not allowed: -2, -4")
+      end
+    end
   end
 end
