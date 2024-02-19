@@ -7,5 +7,7 @@ class StringCalculator
 
     return 0 if string.empty?
     return string.to_i if StringValidator.numeric?(string)
+
+    string.delete(' ').split(',').map(&:to_i).sum
   end
 end
