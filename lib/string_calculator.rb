@@ -8,11 +8,21 @@ class StringCalculator
     return 0 if string.empty?
     return string.to_i if StringValidator.numeric?(string)
 
-    # Split by both commas and new lines, then map each part to integer and sum them up
-    numbers = string.delete(' ').split(/[,\n]/)
-    # Check if the string ends with a comma or \n which indicates invalid input
-    raise ArgumentError, "Invalid input" if numbers.any?(&:empty?)
+    delimiter = ',' # Default delimiter
 
-    numbers.map(&:to_i).sum
+    # Check if the string starts with a custom delimiter declaration
+    if string.start_with?("//")
+      delimiter_line, numbers = string.split("\n", 2)
+      delimiter = delimiter_line[2..-1] # Extract the custom delimiter from the declaration
+    else
+      numbers = string
+    end
+
+    # Split the numbers using the delimiter and calculate the sum
+    splitted_numbers = numbers.delete(' ').split(/#{Regexp.escape(delimiter)}|,|\n/)
+
+    raise ArgumentError, "Invalid input" if splitted_numbers.any?(&:empty?)
+
+    splitted_numbers.map(&:to_i).sum
   end
 end

@@ -41,5 +41,27 @@ RSpec.describe StringCalculator do
         expect { subject.add("1\n,2") }.to raise_error(ArgumentError)
       end
     end
+
+    context "with different delimiters" do
+      it "supports custom delimiter" do
+        expect(subject.add("//;\n1;2")).to eq(3)
+      end
+
+      it "supports custom delimiter with different numbers" do
+        expect(subject.add("//;\n1;2;3;4")).to eq(10)
+      end
+
+      it "supports custom delimiter with new lines" do
+        expect(subject.add("//*\n1\n2*3\n4")).to eq(10)
+      end
+
+      it "supports custom delimiter with mixed delimiters" do
+        expect(subject.add("//#\n1\n2,3\n4#5")).to eq(15)
+      end
+
+      it "raises ArgumentError for invalid input with custom delimiter" do
+        expect { subject.add("//;\n1;\n2") }.to raise_error(ArgumentError)
+      end
+    end
   end
 end
