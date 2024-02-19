@@ -1,6 +1,21 @@
 # frozen_string_literal: true
 
 require_relative 'dependencies'
+
+# Custom error class for invalid input
+class InvalidInputError < ArgumentError
+  def initialize(message = 'Invalid input')
+    super
+  end
+end
+
+# Custom error class for negative numbers
+class NegativeNumbersError < ArgumentError
+  def initialize(numbers)
+    super("Negative numbers not allowed: #{numbers.join(', ')}")
+  end
+end
+
 # Performs calculations on strings containing numbers.
 class StringCalculator
   def self.add(string)
@@ -30,11 +45,11 @@ class StringCalculator
   end
 
   def self.validate_numbers(numbers)
-    raise ArgumentError, 'Invalid input' if numbers.any? { |num| num.empty? || num.match(/\s{1,}/) }
+    raise InvalidInputError if numbers.any? { |num| num.empty? || num.match(/\s{1,}/) }
 
     # Check for negative numbers and raise an exception if found
     negatives = numbers.select { |num| num.to_i.negative? }
-    raise ArgumentError, "Negative numbers not allowed: #{negatives.join(', ')}" unless negatives.empty?
+    raise NegativeNumbersError, negatives unless negatives.empty?
   end
 
   private_class_method :extract_numbers, :validate_numbers
