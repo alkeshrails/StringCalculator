@@ -4,7 +4,7 @@
 require_relative '../lib/string_calculator'
 
 RSpec.describe StringCalculator do
-  subject { described_class }
+  subject { described_class.new }
 
   describe '#add' do
     context 'for an empty string' do
@@ -97,6 +97,34 @@ RSpec.describe StringCalculator do
 
       it 'raises ArgumentError with custom delimiter and negative numbers' do
         expect { subject.add("//;\n1;-2;3;-4") }.to raise_error(ArgumentError, 'Negative numbers not allowed: -2, -4')
+      end
+    end
+
+    context 'For invalid inputs' do
+      it 'raises ArgumentError and return invalid input' do
+        expect { subject.add('1,2,') }.to raise_error(ArgumentError, 'Invalid input')
+        expect { subject.add(',1,2') }.to raise_error(ArgumentError, 'Invalid input')
+        expect { subject.add(',1,2,') }.to raise_error(ArgumentError, 'Invalid input')
+        expect { subject.add('1,,2') }.to raise_error(ArgumentError, 'Invalid input')
+        expect { subject.add('1 1,2') }.to raise_error(ArgumentError, 'Invalid input')
+
+        expect { subject.add("1,2\n") }.to raise_error(ArgumentError, 'Invalid input')
+        expect { subject.add("\n1,2") }.to raise_error(ArgumentError, 'Invalid input')
+        expect { subject.add("1\n\n2") }.to raise_error(ArgumentError, 'Invalid input')
+        expect { subject.add("1,\n2") }.to raise_error(ArgumentError, 'Invalid input')
+        expect { subject.add("1,\n,2") }.to raise_error(ArgumentError, 'Invalid input')
+        expect { subject.add("1\n,2 2") }.to raise_error(ArgumentError, 'Invalid input')
+
+        # For Custom Delimitor Invalid Inouts
+
+        expect { subject.add("//;\n;1;2") }.to raise_error(ArgumentError, 'Invalid input')
+        expect { subject.add("//;\n1;2;") }.to raise_error(ArgumentError, 'Invalid input')
+        expect { subject.add("//*\n*1,2") }.to raise_error(ArgumentError, 'Invalid input')
+        expect { subject.add("//*\n1*2*") }.to raise_error(ArgumentError, 'Invalid input')
+        expect { subject.add("//#\n1##2") }.to raise_error(ArgumentError, 'Invalid input')
+        expect { subject.add("//#\n1 1# 2") }.to raise_error(ArgumentError, 'Invalid input')
+
+        expect { subject.add("1\n2#3") }.to raise_error(ArgumentError, 'Invalid input')
       end
     end
   end
